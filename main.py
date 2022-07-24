@@ -14,8 +14,6 @@ def discoverFin(file, transactions):
             name = row[2]
             amount = -float(row[3])
             category = row[4]
-            if category == "Payments and Credits" or category == "Awards and Rebate Credits":
-                continue
             transaction = (date, name, category, amount)
             transactions[month].append(transaction)
         return transactions
@@ -31,7 +29,6 @@ def findCategory(name):
 
 
 def chaseFin(file, transactions):
-    categories = {}
     with open(file, mode='r') as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
@@ -42,9 +39,7 @@ def chaseFin(file, transactions):
             name = row[2]
             amount = float(row[3])
             category = findCategory(name)
-            if row[2][:8] == 'Montrose':
-                category = '*RENT & BILLS*'
-            if category == "Payments and Credits" or category == "Awards and Rebate Credits":
+            if category == "Payments and Credits" or category == "Awards and Rebate Credits" or category == "IGNORE":
                 continue
             transaction = (date, name, category, amount)
             transactions[month].append(transaction)
